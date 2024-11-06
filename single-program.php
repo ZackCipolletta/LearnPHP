@@ -23,13 +23,90 @@ while (have_posts()) {
         </a>
         <span class="metabox__main">
           <?php the_title() ?>
-          
+
         </span>
       </p>
     </div>
 
-    <div class="generic-content"><?php the_content(); ?>
-    </div>
+    <div class="generic-content"><?php the_content(); ?> </div>
+
+    <?php
+    // This object will now contain an array of TWO 'event' posts.
+    $today = date('Ymd');
+    $homepageEvents = new WP_Query(array(
+      'posts_per_page' => 2,
+      'post_type' => 'event',
+      'meta_key' => 'event_date',
+      'orderby' => 'meta_value_num',
+      'order' => 'ASC',
+      'meta_query' => array(
+        array(
+          'key' => 'event_date',
+          'compare' => '>=',
+          'value' => $today,
+          'type' => 'numeric'
+        ),
+        // If the array of array of related_programs contains (or LIKE) the ID number of the
+        // current program post, that is what we are looking for, add it to the 
+        // $homepageEvents array. 
+        array(
+          'key' => 'related_programs',
+          'compare' => 'LIKE',
+          // this is basically PHPs way of concatenating double quotes onto the result of
+          // get_the_ID(). instead of " + get_the_ID + ". This way PHP knows we are searching
+          // for the string value of the ID, so it doesn't return a false positive.
+          'value' => '"' . get_the_ID() . '"'
+        ),
+      )
+    ));
+
+    if($homepageEvents->have_posts()) {
+
+    echo '<hr class="section-break">';
+    echo '<h2 class="headline headline--medium">Upcoming ' . get_the_title() . ' Events</h2>';
+
+    while ($homepageEvents->have_posts()) {
+      $homepageEvents->the_post(); ?>
+      <div class="event-summary">
+        <a class="event-summary__date t-center" href="#">
+          <span class="event-summary__month">
+            <?php
+            // get_field (or the_field) function comes from SCF plugin which allows us to create
+            // custom fields. In this case we created a custom event date field with a date picker.
+            // Here we are using the get_field function to get the 'event_date' field and provide
+            // us w/the value in teh event_date field (the date we selected).
+            $eventDate = new DateTime(get_field('event_date'));
+            echo $eventDate->format('M')
+            ?>
+          </span>
+          <span class="event-summary__day">
+            <?php echo $eventDate->format('d') ?>
+          </span>
+        </a>
+        <div class="event-summary__content">
+          <h5 class="event-summary__title headline headline--tiny">
+            <a href="<?php the_permalink() ?>"><?php the_title() ?>
+            </a>
+          </h5>
+          <p>
+            <?php
+            if (has_excerpt()) {
+              echo get_the_excerpt();
+            } else {
+              echo wp_trim_words(get_the_content(), 18);
+            }
+            ?>
+            <a href="<?php the_permalink() ?>"
+              class="nu gray">Learn more</a>
+          </p>
+        </div>
+      </div>
+
+    <?php }
+}
+
+    ?>
+
   </div>
 <?php }
 
