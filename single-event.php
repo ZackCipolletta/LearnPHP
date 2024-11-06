@@ -42,8 +42,13 @@ while (have_posts()) {
     // within each loop cycle, $program represents the current item from $relatedPrograms vs
     // having to say $relatedPrograms[i] and use the index position to refer to the given index
     // of the array contained in $relatedPrograms
-    foreach($relatedPrograms as $program) {
-      echo get_the_title($program);
+    foreach($relatedPrograms as $program) { ?>
+
+      <li><a href="<?php echo get_the_permalink() ?>
+      "><?php echo get_the_title($program); ?>
+      </a></li>
+
+    <?php 
     }
 
 
