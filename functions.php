@@ -33,6 +33,14 @@ add_action('after_setup_theme', 'university_features');
 
 function university_adjust_queries($query)
 {
+  // only runs if you are on the front end (not in admin) and you are on the 'program' 
+  // archive page AND only if this is the main query (url)
+  if (!is_admin() AND is_post_type_archive('program') AND is_main_query()) {
+    $query->set('orderby', 'title');
+    $query->set('order', 'ASC');
+    $query->set('post_per_page', -1);
+  }
+
   // the function is_main_query() is a failsafe to ensure the if statement only runs if the query
   // being run is the default URL based query (the one that searches for /events or /blog, etc)
   // this way the function won't run for the admin for something unintended
