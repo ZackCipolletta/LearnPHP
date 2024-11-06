@@ -36,20 +36,23 @@ while (have_posts()) {
 
     $relatedPrograms = get_field('related_programs');
 
+    echo '<hr class="section-break">';
+    echo '<h2 class="headline headline--medium" >Related Program(s)</h2>';
+    echo '<ul class="link-list min-list">';
     // Here we basically just say we are going to refer to the variable relatedPrograms and
     // refer to it as program in this loop.  It’s a convenient way to work with each item
     // individually without having to access it by index or key directly.
     // within each loop cycle, $program represents the current item from $relatedPrograms vs
     // having to say $relatedPrograms[i] and use the index position to refer to the given index
     // of the array contained in $relatedPrograms
-    foreach($relatedPrograms as $program) { ?>
-
-      <li><a href="<?php echo get_the_permalink() ?>
-      "><?php echo get_the_title($program); ?>
-      </a></li>
-
-    <?php 
-    }
+    foreach ($relatedPrograms as $program) { ?>
+      <li>
+        <a href="<?php echo get_the_permalink($program) ?>">
+          <?php echo get_the_title($program); ?>
+        </a>
+      </li>
+    <?php }
+    echo '</ul>';
 
 
     ?>
