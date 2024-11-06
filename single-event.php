@@ -14,6 +14,7 @@ while (have_posts()) {
       </div>
     </div>
   </div>
+
   <div class="container container--narrow page-section">
     <div class="metabox metabox--position-up metabox--with-home-link">
       <p>
@@ -23,16 +24,34 @@ while (have_posts()) {
         </a>
         <span class="metabox__main">
           <?php the_title() ?>
-          
+
         </span>
       </p>
     </div>
 
-    <div class="generic-content"><?php the_content(); ?>
-    </div>
+    <div class="generic-content"><?php the_content(); ?></div>
+
+
+    <?php
+
+    $relatedPrograms = get_field('related_programs');
+
+    // Here we basically just say we are going to refer to the variable relatedPrograms and
+    // refer to it as program in this loop.  It’s a convenient way to work with each item
+    // individually without having to access it by index or key directly.
+    // within each loop cycle, $program represents the current item from $relatedPrograms vs
+    // having to say $relatedPrograms[i] and use the index position to refer to the given index
+    // of the array contained in $relatedPrograms
+    foreach($relatedPrograms as $program) {
+      echo get_the_title($program);
+    }
+
+
+    ?>
+
+
   </div>
 <?php }
-
 
 get_footer();
 ?>
