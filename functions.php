@@ -1,4 +1,45 @@
 <?php
+
+function pageBanner($args = NULL)
+{
+  if (!isset($args['title'])) {
+    $args['title'] = get_the_title();
+  }
+  if (!isset($args['subtitle'])) {
+    $args['subtitle'] = get_field('page_banner_subtitle');
+  }
+  if (!isset($args['photo'])) {
+    if (get_field('page_banner_background_image')) {
+      $args['photo'] = get_field('page_banner_background_image')['sizes']['pageBanner'];
+    } else {
+      $args['photo'] = get_theme_file_uri('/images/ocean.jpg');
+    }
+  }
+
+?>
+  <div class="page-banner">
+
+    <div class="page-banner__bg-image"
+      style="background-image: url(<?php echo $args['photo']; ?>)">
+    </div>
+
+    <div class="page-banner__content container container--narrow">
+      <h1 class="page-banner__title"><?php echo $args['title'] ?> </h1>
+
+      <div class="page-banner__intro">
+        <p><?php echo $args['subtitle'] ?>
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+<?php
+
+}
+
+
 function university_files()
 {
   wp_enqueue_script('main-university-js', get_theme_file_uri('/build/index.js'), array('jquery'), '1.0', true);
@@ -41,7 +82,7 @@ function university_adjust_queries($query)
 {
   // only runs if you are on the front end (not in admin) and you are on the 'program' 
   // archive page AND only if this is the main query (url)
-  if (!is_admin() AND is_post_type_archive('program') AND is_main_query()) {
+  if (!is_admin() and is_post_type_archive('program') and is_main_query()) {
     $query->set('orderby', 'title');
     $query->set('order', 'ASC');
     $query->set('post_per_page', -1);
@@ -57,13 +98,13 @@ function university_adjust_queries($query)
     $query->set('order', 'ASC');
     $query->set('meta_query', 'ASC');
     $query->set('meta_query', array(
-              array(
-                'key' => 'event_date',
-                'compare' => '>=',
-                'value' => $today,
-                'type' => 'numeric'
-              )
-            ));
+      array(
+        'key' => 'event_date',
+        'compare' => '>=',
+        'value' => $today,
+        'type' => 'numeric'
+      )
+    ));
   }
 }
 
