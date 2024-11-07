@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<div class="full-width-split group">
+<div class="full-width-split group"> 
   <div class="full-width-split__one">
     <div class="full-width-split__inner">
       <h2 class="headline headline--small-plus t-center">Upcoming Events</h2>
