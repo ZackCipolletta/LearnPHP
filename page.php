@@ -8,8 +8,6 @@ while (have_posts()) {
   pageBanner();
 ?>
 
-
-
   <div class="container container--narrow page-section">
 
     <?php
