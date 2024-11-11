@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<div class="full-width-split group"> 
+<div class="full-width-split group">
   <div class="full-width-split__one">
     <div class="full-width-split__inner">
       <h2 class="headline headline--small-plus t-center">Upcoming Events</h2>
@@ -36,43 +36,15 @@
       ));
 
       while ($homepageEvents->have_posts()) {
-        $homepageEvents->the_post(); ?>
-        <div class="event-summary">
-          <a class="event-summary__date t-center" href="#">
-            <span class="event-summary__month">
-              <?php
-              // get_field (or the_field) function comes from SCF plugin which allows us to create
-              // custom fields. In this case we created a custom event date field with a date picker.
-              // Here we are using the get_field function to get the 'event_date' field and provide
-              // us w/the value in teh event_date field (the date we selected).
-              $eventDate = new DateTime(get_field('event_date'));
-              echo $eventDate->format('M')
-              ?>
-            </span>
-            <span class="event-summary__day">
-              <?php echo $eventDate->format('d') ?>
-            </span>
-          </a>
-          <div class="event-summary__content">
-            <h5 class="event-summary__title headline headline--tiny">
-              <a href="<?php the_permalink() ?>"><?php the_title() ?>
-              </a>
-            </h5>
-            <p>
-              <?php
-              if (has_excerpt()) {
-                echo get_the_excerpt();
-              } else {
-                echo wp_trim_words(get_the_content(), 18);
-              }
-              ?>
-              <a href="<?php the_permalink() ?>"
-                class="nu gray">Learn more</a>
-            </p>
-          </div>
-        </div>
-
-      <?php }
+        $homepageEvents->the_post();
+        // get_template_part function takes 2 arguments; the second is optional
+        // in order to use the second argument, the file must be named using the convention 'blank-blank'
+        // the first argument is the name before the dash and the second is the name after the dash.
+        // this can be useful when making the second argument dynamic using a function for instance.
+        // point to the folder and then the file in the folder. We don't even need to put the
+        // '.php' of the file - we only need the slug name of the file.
+        get_template_part('template-parts/content-event');
+      }
       ?>
 
       <p class="t-center no-margin">
