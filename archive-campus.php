@@ -15,7 +15,9 @@ pageBanner(array(
       the_post(); ?>
       <li>
         <a href="<?php the_permalink() ?>"><?php the_title(); 
-        $mapLocation = get_field('map_location') ?> </a>
+        $mapLocation = get_field('map_location');
+        print_r($mapLocation);
+        ?> </a>
       </li>
 
     <?php }
