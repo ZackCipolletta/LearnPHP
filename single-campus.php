@@ -84,46 +84,6 @@ while (have_posts()) {
     // the last custom query instead of the URL query for instance).
     wp_reset_postdata();
 
-    // This object will now contain an array of TWO 'event' posts.
-    $today = date('Ymd');
-    $homepageEvents = new WP_Query(array(
-      'posts_per_page' => 2,
-      'post_type' => 'event',
-      'meta_key' => 'event_date',
-      'orderby' => 'meta_value_num',
-      'order' => 'ASC',
-      'meta_query' => array(
-        array(
-          'key' => 'event_date',
-          'compare' => '>=',
-          'value' => $today,
-          'type' => 'numeric'
-        ),
-        // If the array of array of related_programs contains (or LIKE) the ID number of the
-        // current program post, that is what we are looking for, add it to the 
-        // $homepageEvents array. 
-        array(
-          'key' => 'related_programs',
-          'compare' => 'LIKE',
-          // this is basically PHPs way of concatenating double quotes onto the result of
-          // get_the_ID(). instead of " + get_the_ID + ". This way PHP knows we are searching
-          // for the string value of the ID, so it doesn't return a false positive.
-          'value' => '"' . get_the_ID() . '"'
-        ),
-      )
-    ));
-
-    if ($homepageEvents->have_posts()) {
-
-      echo '<hr class="section-break">';
-      echo '<h2 class="headline headline--medium">Upcoming ' . get_the_title() . ' Events</h2>';
-
-      while ($homepageEvents->have_posts()) {
-        $homepageEvents->the_post();
-        get_template_part('template-parts/content-event');
-      }
-    }
-
     ?>
 
   </div>
