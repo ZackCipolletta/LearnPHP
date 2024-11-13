@@ -235,11 +235,12 @@ class Search {
     this.previousValue = this.searchField.val();
   }
   getResults() {
-    this.resultsDiv.html("imagine real search results here");
-    this.isSpinnerVisible = false;
+    jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON('http://fictional-university.local/wp-json/wp/v2/posts?search=' + this.searchField.val(), function (posts) {
+      alert(posts[0].title.rendered);
+    });
   }
   keyPressDispatcher(e) {
-    if (e.keyCode === 83 && !this.isOverlayOpen) {
+    if (e.keyCode === 83 && !this.isOverlayOpen && !jquery__WEBPACK_IMPORTED_MODULE_0___default()("input, textarea").is(':focus')) {
       this.openOverlay();
     }
     if (e.keyCode === 27 && this.isOverlayOpen) {
