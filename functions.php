@@ -83,18 +83,25 @@ add_action('after_setup_theme', 'university_features');
 
 function university_adjust_queries($query)
 {
+
   // only runs if you are on the front end (not in admin) and you are on the 'program' 
   // archive page AND only if this is the main query (url)
-  if (!is_admin() and is_post_type_archive('program') and is_main_query()) {
+  if (!is_admin() && is_post_type_archive('campus') && $query->is_main_query()) {
+    $query->set('posts_per_page', -1);
+  }
+
+  // only runs if you are on the front end (not in admin) and you are on the 'program' 
+  // archive page AND only if this is the main query (url)
+  if (!is_admin() && is_post_type_archive('program') && $query->is_main_query()) {
     $query->set('orderby', 'title');
     $query->set('order', 'ASC');
-    $query->set('post_per_page', -1);
+    $query->set('posts_per_page', -1);
   }
 
   // the function is_main_query() is a failsafe to ensure the if statement only runs if the query
   // being run is the default URL based query (the one that searches for /events or /blog, etc)
   // this way the function won't run for the admin for something unintended
-  if (!is_admin() and is_post_type_archive('event') and $query->is_main_query()) {
+  if (!is_admin() && is_post_type_archive('event') && $query->is_main_query()) {
     $today = date('Ymd');
     $query->set('meta_key', 'event_date');
     $query->set('orderby', 'meta_value_num');
@@ -113,7 +120,8 @@ function university_adjust_queries($query)
 
 add_action('pre_get_posts', 'university_adjust_queries');
 
-function universityMapKey($api) {
+function universityMapKey($api)
+{
   $api['key'] = GOOGLE_MAPS_API_KEY;
   return $api;
 }
