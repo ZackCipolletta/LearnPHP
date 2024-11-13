@@ -1,7 +1,20 @@
 class Search {
+  // 1. describe and create/initiate our object
   constructor() {
-    alert("Hello I am a search.")
+    this.openButton = " "
+
+  }
+  // 2. events
+
+
+  // 3. methods (functions, actions..)
+  openOverlay() {
+
+  }
+
+  closeOverly() {
+
   }
 }
 
-export default Search
+export default Search;
