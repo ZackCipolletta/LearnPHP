@@ -1,5 +1,18 @@
 <?php
 
+// creates a new function that will add a new property to the rest api
+function university_custom_rest() {
+  // takes 3 arguments: 1 the post type, whatever you want to name the new field , 
+  // an array that describes how to manage the field 
+  register_rest_field('post', 'authorName', array(
+    'get_callback' =>  function() {return get_the_author();}
+  ));
+}
+
+// tells WP to run a new function (arg2) when (arg1) happens 
+// In this case when the REST API initializes
+add_action('rest_api_init', 'university_custom_rest');
+
 function pageBanner($args = NULL)
 {
   if (!isset($args['title'])) {
