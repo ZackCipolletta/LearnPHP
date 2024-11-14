@@ -1,5 +1,7 @@
 <?php
 
+require get_theme_file_path('/inc/search-route.php');
+
 // creates a new function that will add a new property to the rest api
 function university_custom_rest() {
   // takes 3 arguments: 1 the post type, 2 whatever you want to name the new field , 
