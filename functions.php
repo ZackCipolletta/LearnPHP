@@ -53,6 +53,11 @@ function university_files()
   /* takes 2 args (first name or nickname for main stylesheet, 2nd is location
   that points to file. in this case this wp function performs the action).
   */
+
+  wp_localize_script('main-university-js', 'universityData', array(
+    // returns the url for the current WP installation
+    'root_url' => trailingslashit(get_site_url())
+  ));
 }
 
 add_action('wp_enqueue_scripts', 'university_files');

@@ -235,7 +235,7 @@ class Search {
     this.previousValue = this.searchField.val();
   }
   getResults() {
-    jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON('http://fictional-university.local/wp-json/wp/v2/posts?search=' + this.searchField.val(), posts => {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON(universityData.root_url + '/wp-json/wp/v2/posts?search=' + this.searchField.val(), posts => {
       this.resultsDiv.html(`
           <h2 class="search-overlay__section-title">General Information</h2>
           ${posts.length ? '<ul class="link-list min-list">' : '<p>No general information matches that search.</p>'}
@@ -243,6 +243,7 @@ class Search {
             ${posts.length ? '</ul>' : ''}
           </ul>
         `);
+      this.isSpinnerVisible = false;
     });
   }
   keyPressDispatcher(e) {
