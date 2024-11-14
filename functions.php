@@ -2,8 +2,8 @@
 
 // creates a new function that will add a new property to the rest api
 function university_custom_rest() {
-  // takes 3 arguments: 1 the post type, whatever you want to name the new field , 
-  // an array that describes how to manage the field 
+  // takes 3 arguments: 1 the post type, 2 whatever you want to name the new field , 
+  // 3 an array that describes how to manage the field 
   register_rest_field('post', 'authorName', array(
     'get_callback' =>  function() {return get_the_author();}
   ));
