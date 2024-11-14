@@ -12,17 +12,19 @@ function universityRegisterSearch()
   ));
 };
 
-function universitySearchResults()
+function universitySearchResults($data)
 {
   $professors = new WP_Query(array(
-    'post_type' => 'professor'
+    'post_type' => 'professor',
+    // s stands for search
+    's' => sanitize_text_field($data['term'])
   ));
 
   $professorResults = array();
 
   // however many number of posts are in the collection of the 'professors' object is however
   // many times the loop should run
-  while($professors->have_posts()) {
+  while ($professors->have_posts()) {
     // this gets all the data from the relevant post ready and accessible
     $professors->the_post();
     // takes 2 arguments: 1 the array you want to add onto, 2 what you want to add on to the array
