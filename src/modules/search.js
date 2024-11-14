@@ -43,9 +43,17 @@ class Search {
   }
 
   getResults() {
-    $.getJSON('http://fictional-university.local/wp-json/wp/v2/posts?search=' + this.searchField.val(), function (posts) {
-      alert(posts[0].title.rendered);
-    });
+    $.getJSON('http://fictional-university.local/wp-json/wp/v2/posts?search=' +
+      this.searchField.val(), posts => {
+        this.resultsDiv.html(`
+          <h2 class="search-overlay__section-title">General Information</h2>
+          <ul class="link-list min-list">
+            <li>
+              <a href="${posts[0].link}">${posts[0].title.rendered}</a>
+            </li>
+          </ul>
+        `);
+      });
 
   }
 
