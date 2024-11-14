@@ -246,6 +246,8 @@ class Search {
         </ul>
       `);
       this.isSpinnerVisible = false;
+    }, () => {
+      this.resultsDiv.html('<p>Unexpected error; please try again.</p>');
     });
   }
   keyPressDispatcher(e) {
