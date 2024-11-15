@@ -48,7 +48,10 @@ function universitySearchResults($data)
       // takes 2 arguments: 1 the array you want to add onto, 2 what you want to add on to the array
       array_push($results['professors'], array(
         'title' => get_the_title(),
-        'permalink' => get_the_permalink()
+        'permalink' => get_the_permalink(),
+        // get_the_post_thumbnail_url takes 2 arguments: 1 which post you want to get the thumbnail
+        // image for (0 means the current post), 2 the size
+        'image' => get_the_post_thumbnail_url(0, 'professorLandscape')
       ));
     }
 
@@ -66,14 +69,24 @@ function universitySearchResults($data)
         'title' => get_the_title(),
         'permalink' => get_the_permalink()
       ));
+    }
 
-      if (get_post_type() === 'event') {
-        // takes 2 arguments: 1 the array you want to add onto, 2 what you want to add on to the array
-        array_push($results['events'], array(
-          'title' => get_the_title(),
-          'permalink' => get_the_permalink()
-        ));
+    if (get_post_type() === 'event') {
+      // takes 2 arguments: 1 the array you want to add onto, 2 what you want to add on to the array
+      $eventDate = new DateTime(get_field('event_date'));
+      $description = null;
+      if (has_excerpt()) {
+        $description = get_the_excerpt();
+      } else {
+        $description = wp_trim_words(get_the_content(), 18);
       }
+      array_push($results['events'], array(
+        'title' => get_the_title(),
+        'permalink' => get_the_permalink(),
+        'month' => $eventDate->format('M'),
+        'day' => $eventDate->format('d'),
+        'description' => $description
+      ));
     }
   }
   return $results;
