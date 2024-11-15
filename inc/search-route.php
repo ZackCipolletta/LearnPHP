@@ -75,7 +75,6 @@ function universitySearchResults($data)
         ));
       }
     }
-
-    return $results;
   }
+  return $results;
 }
