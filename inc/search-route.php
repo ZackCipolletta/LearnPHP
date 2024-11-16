@@ -59,7 +59,8 @@ function universitySearchResults($data)
       // takes 2 arguments: 1 the array you want to add onto, 2 what you want to add on to the array
       array_push($results['programs'], array(
         'title' => get_the_title(),
-        'permalink' => get_the_permalink()
+        'permalink' => get_the_permalink(),
+
       ));
     }
 
@@ -89,5 +90,37 @@ function universitySearchResults($data)
       ));
     }
   }
+
+  $programRelationshipQuery = new WP_Query(array(
+    'post_type' => 'professor',
+    // This array inside another array let's us search related programs. Inside the nested array we are
+    // searching the custom field we want to look in - in this case related_programs - in WP (the key) 
+    // and using the compare and value keys to refine any results from the related_programs 
+    'meta_query' => array(
+      array(
+        'key' => 'related_programs',
+        'compare' => 'LIKE',
+        'value' => '"69"'
+      )
+    )
+  ));
+
+  while ($programRelationshipQuery -> have_posts()) {
+    $programRelationshipQuery -> the_post();
+    if (get_post_type() === 'professor') {
+
+      // takes 2 arguments: 1 the array you want to add onto, 2 what you want to add on to the array
+      array_push($results['professors'], array(
+        'title' => get_the_title(),
+        'permalink' => get_the_permalink(),
+        // get_the_post_thumbnail_url takes 2 arguments: 1 which post you want to get the thumbnail
+        // image for (0 means the current post), 2 the size
+        'image' => get_the_post_thumbnail_url(0, 'professorLandscape')
+      ));
+    }
+  };
+
+  $results['professors'] = array_values(array_unique($results['professors'], SORT_REGULAR));
+
   return $results;
 }
