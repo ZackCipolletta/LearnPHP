@@ -56,6 +56,18 @@ function universitySearchResults($data)
     }
 
     if (get_post_type() === 'program') {
+      $relatedCampuses = get_field('related_campus');
+
+      if($relatedCampuses) {
+        foreach($relatedCampuses as $campus){
+          array_push($results['campuses'], array(
+            'title' => get_the_title($campus),
+            'permalink' => get_the_permalink($campus),
+
+          ));
+        }
+      }
+      
       // takes 2 arguments: 1 the array you want to add onto, 2 what you want to add on to the array
       array_push($results['programs'], array(
         'title' => get_the_title(),
