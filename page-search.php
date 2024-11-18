@@ -25,8 +25,6 @@ while (have_posts()) {
     <?php }
     ?>
 
-
-
     <?php
     // get_pages() is instructed to return an array containing all child pages of the 
     // current page. The id of the current page is retrieved using the get_the_id() function.
@@ -65,14 +63,9 @@ while (have_posts()) {
 
     <?php   } ?>
 
-
     <div class="generic-content">
-      <!-- by default a form will submit itself to it's own url. But my adding the action and a url
-      it will ihnstead submit to the specified url page.
-      By Echoing out the site URL and a '/' it will submit to the homepage url for hte WP installation -->
+      <!-- built in SP function that will pull from the file 'searchform.php' -->
       <?php get_search_form(); ?>
-
-
 
     </div>
   </div>
