@@ -105,7 +105,7 @@ function universitySearchResults($data)
 
     $programRelationshipQuery = new WP_Query(
       array(
-        'post_type' => 'professor',
+        'post_type' => array('professor', 'event'),
         // This array inside another array let's us search related programs. Inside the nested array we are
         // searching the custom field we want to look in - in this case related_programs - in WP (the key) 
         // and using the compare and value keys to refine any results from the related_programs 
@@ -115,6 +115,25 @@ function universitySearchResults($data)
 
     while ($programRelationshipQuery->have_posts()) {
       $programRelationshipQuery->the_post();
+
+      if (get_post_type() === 'event') {
+        // takes 2 arguments: 1 the array you want to add onto, 2 what you want to add on to the array
+        $eventDate = new DateTime(get_field('event_date'));
+        $description = null;
+        if (has_excerpt()) {
+          $description = get_the_excerpt();
+        } else {
+          $description = wp_trim_words(get_the_content(), 18);
+        }
+        array_push($results['events'], array(
+          'title' => get_the_title(),
+          'permalink' => get_the_permalink(),
+          'month' => $eventDate->format('M'),
+          'day' => $eventDate->format('d'),
+          'description' => $description
+        ));
+      }
+
       if (get_post_type() === 'professor') {
 
         // takes 2 arguments: 1 the array you want to add onto, 2 what you want to add on to the array
@@ -129,9 +148,8 @@ function universitySearchResults($data)
     };
 
     $results['professors'] = array_values(array_unique($results['professors'], SORT_REGULAR));
+    $results['events'] = array_values(array_unique($results['events'], SORT_REGULAR));
   }
-
-
 
   return $results;
 }
