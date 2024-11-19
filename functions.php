@@ -195,6 +195,7 @@ function ourLoginCss() {
   wp_enqueue_style('university_extra_styles', get_theme_file_uri('/build/index.css'));
 }
 
+// displays the name of the university at the login screen
 add_filter('login_headertitle', 'ourLoginTitle');
 
 function ourLoginTitle() {
