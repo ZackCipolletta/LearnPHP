@@ -175,3 +175,12 @@ function noSubsAdminBar() {
     show_admin_bar(false);
   }
 }
+
+// Customize login screen
+// takes 2 arguments; 1 the value or object you want to customize, filter or change, 
+// 2 function that returns whatever you want to use instead.
+add_filter('login_headerurl', 'ourHeaderUrl');
+
+function ourHeaderUrl() {
+  return esc_url(site_url('/'));
+}
