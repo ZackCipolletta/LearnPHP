@@ -25,8 +25,6 @@ while (have_posts()) {
     <?php }
     ?>
 
-
-
     <?php
     // get_pages() is instructed to return an array containing all child pages of the 
     // current page. The id of the current page is retrieved using the get_the_id() function.
@@ -64,7 +62,6 @@ while (have_posts()) {
       </div>
 
     <?php   } ?>
-
 
     <div class="generic-content">
       <?php the_content(); ?>
