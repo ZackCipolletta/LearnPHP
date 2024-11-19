@@ -147,3 +147,31 @@ function universityMapKey($api)
 }
 
 add_filter('acf/fields/google_map/api', 'universityMapKey');
+
+
+// Redirect subscriber accounts out of admin and onto homepage
+// takes 2 arguments; 1 the name of the WP function you want to hook onto
+// 2 a function we create
+add_action('admin_init', 'redirectSubsToFrontEnd');
+
+function redirectSubsToFrontEnd() {
+  $ourCurrentUser = wp_get_current_user();
+
+  // if the current user's roles array contains 1 role and the role is subscribe
+  if(count($ourCurrentUser->roles) === 1 && $ourCurrentUser->roles[0] === 'subscriber') {
+    wp_redirect(site_url('/'));
+    exit;
+  }
+}
+
+// Hide the admin bar only for subscribers
+add_action('wp_loaded', 'noSubsAdminBar');
+
+function noSubsAdminBar() {
+  $ourCurrentUser = wp_get_current_user();
+
+  // if the current user's roles array contains 1 role and the role is subscribe
+  if(count($ourCurrentUser->roles) === 1 && $ourCurrentUser->roles[0] === 'subscriber') {
+    show_admin_bar(false);
+  }
+}
