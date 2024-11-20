@@ -20,6 +20,9 @@ class MyNotes {
       field.removeAttribute("readonly");
       field.classList.add("note-active-field");
     });
+    thisNote.querySelectorAll(".update-note").forEach((field) => {
+      field.classList.add("update-note--visible");
+    })
   }
 
   deleteNote(e) {
