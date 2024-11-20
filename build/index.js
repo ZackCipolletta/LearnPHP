@@ -2270,8 +2270,10 @@ class MyNotes {
   editNote(e) {
     const thisNote = e.target.closest("li");
     if (thisNote.dataset.state === "editable") {
+      console.log("reached read only");
       this.makeNoteReadOnly(thisNote);
     } else {
+      console.log("reached editable");
       this.makeNoteEditable(thisNote);
     }
   }
@@ -2286,20 +2288,20 @@ class MyNotes {
     thisNote.querySelectorAll(".update-note").forEach(field => {
       field.classList.add("update-note--visible");
     });
-    thisNote.dataset.state === "editable";
+    thisNote.dataset.state = "editable";
   }
   makeNoteReadOnly(thisNote) {
     thisNote.querySelectorAll(".edit-note").forEach(element => {
       element.innerHTML = ` <i class="fa fa-pencil" aria-hidden="true"> </i> Edit`;
     });
     thisNote.querySelectorAll(".note-title-field, .note-body-field").forEach(field => {
-      field.removeAttribute("note-active-field");
-      field.classList.add("readonly");
+      field.classList.remove("note-active-field");
+      field.setAttribute("readonly", true);
     });
     thisNote.querySelectorAll(".update-note").forEach(field => {
-      field.removeAttribute("update-note--visible");
+      field.classList.remove("update-note--visible");
     });
-    thisNote.dataset.state === "cancel";
+    thisNote.dataset.state = "cancel";
   }
   deleteNote(e) {
     const thisNote = e.target.closest("li");
