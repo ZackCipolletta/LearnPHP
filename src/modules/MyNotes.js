@@ -7,12 +7,23 @@ class MyNotes {
     document.querySelectorAll(".delete-note").forEach(button => {
       button.addEventListener("click", this.deleteNote);
     });
+
+    document.querySelectorAll(".edit-note").forEach(button => {
+      button.addEventListener("click", this.editNote);
+    });
   }
 
   // Methods will go here
-  deleteNote(e) {
+  editNote(e) {
+    const thisNote = e.target.closest("li");
+    thisNote.querySelectorAll(".note-title-field, .note-body-field").forEach((field) => {
+      field.removeAttribute("readonly");
+      field.classList.add("note-active-field");
+    });
+  }
 
-    const thisNote = e.target.parentElement;
+  deleteNote(e) {
+    const thisNote = e.target.closest("li");
 
     //The dataset property gives you access to all 'data-' attributes on an element
     fetch(universityData.root_url + 'wp-json/wp/v2/note/' + thisNote.dataset.id, {
@@ -27,6 +38,7 @@ class MyNotes {
           console.log("Sorry");
           console.log(response);
         } else {
+
           console.log("Congrats");
           console.log(response);
         }
