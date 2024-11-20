@@ -64,6 +64,8 @@
         </nav>
         <div class="site-header__util">
           <?php if (is_user_logged_in()) { ?>
+            <a href="<?php echo esc_url(site_url('/my-notes')); ?>
+            " class="btn btn--small btn--orange float-left push-right">My notes</a>
             <a href="<?php echo wp_logout_url() ?>
             " class="btn btn--small btn--dark-orange float-left btn--with-photo">
 
@@ -74,7 +76,7 @@
           <?php } else { ?>
             <a href="<?php echo wp_login_url(); ?>
             " class="btn btn--small btn--orange float-left push-right">Login</a>
-            
+
             <a href="<?php echo wp_registration_url(); ?>
           " class="btn btn--small btn--dark-orange float-left">Sign Up</a>
           <?php } ?>
