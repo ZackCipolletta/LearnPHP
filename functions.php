@@ -3,11 +3,14 @@
 require get_theme_file_path('/inc/search-route.php');
 
 // creates a new function that will add a new property to the rest api
-function university_custom_rest() {
+function university_custom_rest()
+{
   // takes 3 arguments: 1 the post type, 2 whatever you want to name the new field , 
   // 3 an array that describes how to manage the field 
   register_rest_field('post', 'authorName', array(
-    'get_callback' =>  function() {return get_the_author();}
+    'get_callback' =>  function () {
+      return get_the_author();
+    }
   ));
 }
 
@@ -55,7 +58,6 @@ function pageBanner($args = NULL)
 <?php
 
 }
-
 
 function university_files()
 {
@@ -154,11 +156,12 @@ add_filter('acf/fields/google_map/api', 'universityMapKey');
 // 2 a function we create
 add_action('admin_init', 'redirectSubsToFrontEnd');
 
-function redirectSubsToFrontEnd() {
+function redirectSubsToFrontEnd()
+{
   $ourCurrentUser = wp_get_current_user();
 
   // if the current user's roles array contains 1 role and the role is subscribe
-  if(count($ourCurrentUser->roles) === 1 && $ourCurrentUser->roles[0] === 'subscriber') {
+  if (count($ourCurrentUser->roles) === 1 && $ourCurrentUser->roles[0] === 'subscriber') {
     wp_redirect(site_url('/'));
     exit;
   }
@@ -167,11 +170,12 @@ function redirectSubsToFrontEnd() {
 // Hide the admin bar only for subscribers
 add_action('wp_loaded', 'noSubsAdminBar');
 
-function noSubsAdminBar() {
+function noSubsAdminBar()
+{
   $ourCurrentUser = wp_get_current_user();
 
   // if the current user's roles array contains 1 role and the role is subscribe
-  if(count($ourCurrentUser->roles) === 1 && $ourCurrentUser->roles[0] === 'subscriber') {
+  if (count($ourCurrentUser->roles) === 1 && $ourCurrentUser->roles[0] === 'subscriber') {
     show_admin_bar(false);
   }
 }
@@ -181,14 +185,16 @@ function noSubsAdminBar() {
 // 2 function that returns whatever you want to use instead.
 add_filter('login_headerurl', 'ourHeaderUrl');
 
-function ourHeaderUrl() {
+function ourHeaderUrl()
+{
   return esc_url(site_url('/'));
 }
 
 // customize the css on the login screen
 add_action('login_enqueue_scripts', 'ourLoginCss');
 
-function ourLoginCss() {
+function ourLoginCss()
+{
   wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
   wp_enqueue_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
   wp_enqueue_style('university_main_styles', get_theme_file_uri('/build/style-index.css'));
@@ -198,7 +204,7 @@ function ourLoginCss() {
 // displays the name of the university at the login screen
 add_filter('login_headertitle', 'ourLoginTitle');
 
-function ourLoginTitle() {
+function ourLoginTitle()
+{
   return get_bloginfo('name');
 };
-
