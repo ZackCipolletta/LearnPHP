@@ -15,10 +15,11 @@ class MyNotes {
     });
 
     document.querySelectorAll(".update-note").forEach(button => {
-      // we need to bind 'this' or else JS will modify the value of 'this' and set it to equal
-      // whatever element was clicked on
       button.addEventListener("click", this.updateNote.bind(this));
     });
+
+    const submitNote = document.querySelector(".submit-note");
+    submitNote.addEventListener("click", this.createNote.bind(this));
   }
 
   // Methods will go here
@@ -117,6 +118,41 @@ class MyNotes {
           console.log(response);
         } else {
           this.makeNoteReadOnly(thisNote);
+          console.log("Congrats");
+          console.log(response);
+        }
+      })
+      .catch((error) => { // Call error callback on any failure
+        console.log("Error:", error.message);
+      });
+  }
+
+  createNote(e) {
+    const ourNewPost = {
+      'title': document.querySelector(".new-note-title").value,
+      'content': document.querySelector(".new-note-body").value,
+      'status': 'publish'
+    };
+
+    //The dataset property gives you access to all 'data-' attributes on an element
+    fetch(universityData.root_url + 'wp-json/wp/v2/note/', {
+      method: 'POST',
+      headers: {
+        'X-WP-Nonce': universityData.nonce,  // Set the nonce header for authorization
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(ourNewPost)
+    })
+      .then((response) => { // Call success callback on any successful response
+        if (!response.ok) {
+          console.log("Sorry");
+          console.log(response);
+        } else {
+          document.querySelectorAll(".new-note-title .new-note-body").forEach(field => {
+            field.value = '';
+          });
+          document.querySelector("#my-notes").insertAdjacentHTML("afterbegin", "<li>Imagine real data here</li>");
+
           console.log("Congrats");
           console.log(response);
         }
