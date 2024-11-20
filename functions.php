@@ -73,7 +73,10 @@ function university_files()
 
   wp_localize_script('main-university-js', 'universityData', array(
     // returns the url for the current WP installation
-    'root_url' => trailingslashit(get_site_url())
+    'root_url' => trailingslashit(get_site_url()),
+    // creates a randomly generated number just for our user session on login. Can be used for REST authorization
+    'nonce' => wp_create_nonce('wp_rest')
+
   ));
 }
 
