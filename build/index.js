@@ -2262,8 +2262,11 @@ class MyNotes {
   }
 
   // Methods will go here
-  deleteNote() {
-    fetch(universityData.root_url + 'wp-json/wp/v2/note/116', {
+  deleteNote(e) {
+    const thisNote = e.target.parentElement;
+
+    //The dataset property gives you access to all 'data-' attributes on an element
+    fetch(universityData.root_url + 'wp-json/wp/v2/note/' + thisNote.dataset.id, {
       method: 'DELETE',
       headers: {
         'X-WP-Nonce': universityData.nonce,
