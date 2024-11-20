@@ -5,7 +5,7 @@ class MyNotes {
 
   events() {
     document.querySelectorAll(".delete-note").forEach(button => {
-      button.addEventListener("click", this.deleteNote);
+      button.addEventListener("click", this.deleteNote.bind(this));
     });
 
     document.querySelectorAll(".edit-note").forEach(button => {
@@ -13,52 +13,66 @@ class MyNotes {
       // whatever element was clicked on
       button.addEventListener("click", this.editNote.bind(this));
     });
+
+    document.querySelectorAll(".update-note").forEach(button => {
+      // we need to bind 'this' or else JS will modify the value of 'this' and set it to equal
+      // whatever element was clicked on
+      button.addEventListener("click", this.updateNote.bind(this));
+    });
   }
 
   // Methods will go here
   editNote(e) {
     const thisNote = e.target.closest("li");
     if (thisNote.dataset.state === "editable") {
-      console.log("reached read only")
+      console.log("reached read only");
       this.makeNoteReadOnly(thisNote);
     } else {
-      console.log("reached editable")
+      console.log("reached editable");
       this.makeNoteEditable(thisNote);
     }
   }
 
   makeNoteEditable(thisNote) {
-    thisNote.querySelectorAll(".edit-note").forEach(element => {
-      element.innerHTML = ` <i class="fa fa-times" aria-hidden="true"> </i> Cancel`;
-    });
+    // Update the edit button to "Cancel"
+    const editNote = thisNote.querySelector(".edit-note");
+    editNote.innerHTML = ` <i class="fa fa-times" aria-hidden="true"> </i> Cancel`;
+
+    // Make title and body fields editable
     thisNote.querySelectorAll(".note-title-field, .note-body-field").forEach((field) => {
       field.removeAttribute("readonly");
       field.classList.add("note-active-field");
     });
-    thisNote.querySelectorAll(".update-note").forEach((field) => {
-      field.classList.add("update-note--visible");
-    });
+
+    // Show the update button
+    const updateNote = thisNote.querySelector(".update-note");
+    updateNote.classList.add("update-note--visible");
+
+    // Set the state to "editable"
     thisNote.dataset.state = "editable";
   }
 
   makeNoteReadOnly(thisNote) {
-    thisNote.querySelectorAll(".edit-note").forEach(element => {
-      element.innerHTML = ` <i class="fa fa-pencil" aria-hidden="true"> </i> Edit`;
-    });
+    // Update the edit button from "cancel" back to "Edit"
+    const readOnlyNote = thisNote.querySelector(".edit-note");
+    readOnlyNote.innerHTML = ` <i class="fa fa-pencil" aria-hidden="true"> </i> Edit`;
+
+    // Make title and body fields read-only
     thisNote.querySelectorAll(".note-title-field, .note-body-field").forEach((field) => {
       field.classList.remove("note-active-field");
       field.setAttribute("readonly", true);
     });
-    thisNote.querySelectorAll(".update-note").forEach((field) => {
-      field.classList.remove("update-note--visible");
-    });
-    thisNote.dataset.state = "cancel";
-  }
 
+    // Hide the update button
+    const updateNote = thisNote.querySelector(".update-note");
+    updateNote.classList.remove("update-note--visible");
+
+    // Set the state to "read-only"
+    thisNote.dataset.state = "read-only";
+  }
 
   deleteNote(e) {
     const thisNote = e.target.closest("li");
-
     //The dataset property gives you access to all 'data-' attributes on an element
     fetch(universityData.root_url + 'wp-json/wp/v2/note/' + thisNote.dataset.id, {
       method: 'DELETE',
@@ -72,14 +86,43 @@ class MyNotes {
           console.log("Sorry");
           console.log(response);
         } else {
-
           console.log("Congrats");
           console.log(response);
         }
       })
       .catch((error) => { // Call error callback on any failure
         console.log("Error:", error.message);
+      });
+  }
 
+  updateNote(e) {
+    const thisNote = e.target.closest("li");
+    const ourUpdatedPost = {
+      'title': thisNote.querySelector(".note-title-field").value,
+      'content': thisNote.querySelector(".note-body-field").value
+    };
+
+    //The dataset property gives you access to all 'data-' attributes on an element
+    fetch(universityData.root_url + 'wp-json/wp/v2/note/' + thisNote.dataset.id, {
+      method: 'POST',
+      headers: {
+        'X-WP-Nonce': universityData.nonce,  // Set the nonce header for authorization
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(ourUpdatedPost)
+    })
+      .then((response) => { // Call success callback on any successful response
+        if (!response.ok) {
+          console.log("Sorry");
+          console.log(response);
+        } else {
+          this.makeNoteReadOnly(thisNote);
+          console.log("Congrats");
+          console.log(response);
+        }
+      })
+      .catch((error) => { // Call error callback on any failure
+        console.log("Error:", error.message);
       });
   }
 }
