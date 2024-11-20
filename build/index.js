@@ -2260,13 +2260,25 @@ class MyNotes {
       button.addEventListener("click", this.deleteNote);
     });
     document.querySelectorAll(".edit-note").forEach(button => {
-      button.addEventListener("click", this.editNote);
+      // we need to bind 'this' or else JS will modify the value of 'this' and set it to equal
+      // whatever element was clicked on
+      button.addEventListener("click", this.editNote.bind(this));
     });
   }
 
   // Methods will go here
   editNote(e) {
     const thisNote = e.target.closest("li");
+    if (thisNote.dataset.state === "editable") {
+      this.makeNoteReadOnly(thisNote);
+    } else {
+      this.makeNoteEditable(thisNote);
+    }
+  }
+  makeNoteEditable(thisNote) {
+    thisNote.querySelectorAll(".edit-note").forEach(element => {
+      element.innerHTML = ` <i class="fa fa-times" aria-hidden="true"> </i> Cancel`;
+    });
     thisNote.querySelectorAll(".note-title-field, .note-body-field").forEach(field => {
       field.removeAttribute("readonly");
       field.classList.add("note-active-field");
@@ -2274,6 +2286,20 @@ class MyNotes {
     thisNote.querySelectorAll(".update-note").forEach(field => {
       field.classList.add("update-note--visible");
     });
+    thisNote.dataset.state === "editable";
+  }
+  makeNoteReadOnly(thisNote) {
+    thisNote.querySelectorAll(".edit-note").forEach(element => {
+      element.innerHTML = ` <i class="fa fa-pencil" aria-hidden="true"> </i> Edit`;
+    });
+    thisNote.querySelectorAll(".note-title-field, .note-body-field").forEach(field => {
+      field.removeAttribute("note-active-field");
+      field.classList.add("readonly");
+    });
+    thisNote.querySelectorAll(".update-note").forEach(field => {
+      field.removeAttribute("update-note--visible");
+    });
+    thisNote.dataset.state === "cancel";
   }
   deleteNote(e) {
     const thisNote = e.target.closest("li");
