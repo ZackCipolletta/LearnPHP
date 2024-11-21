@@ -211,3 +211,17 @@ function ourLoginTitle()
 {
   return get_bloginfo('name');
 };
+
+
+// Force note posts to be private
+// The add_filter('wp_insert_post_data') hook in WordPress allows you to filter and modify post data
+// before it is inserted into the database. This can be particularly useful when you want to
+// programmatically adjust or sanitize the content, title, or other fields of a post.
+add_filter('wp_insert_post_data', 'makeNotePrivate');
+
+function makeNotePrivate($data) {
+  if ($data['post_type'] === 'note' && $data['post_status' != 'trash']) {
+    $data['post_status'] = "private";
+  }
+  return $data;
+}
