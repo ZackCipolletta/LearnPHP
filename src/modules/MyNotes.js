@@ -4,19 +4,25 @@ class MyNotes {
   }
 
   events() {
-    document.querySelectorAll(".delete-note").forEach(button => {
-      button.addEventListener("click", this.deleteNote.bind(this));
-    });
+    document.querySelector("#my-notes").addEventListener("click", function (e) {
+      if (e.target.classList.contains("delete-note")) {
+        this.deleteNote(e);
+      }
+    }.bind(this));
 
-    document.querySelectorAll(".edit-note").forEach(button => {
+    document.querySelector("#my-notes").addEventListener("click", function (e) {
+      if (e.target.classList.contains("edit-note")) {
+        this.editNote(e);
+      }
       // we need to bind 'this' or else JS will modify the value of 'this' and set it to equal
       // whatever element was clicked on
-      button.addEventListener("click", this.editNote.bind(this));
-    });
+    }.bind(this));
 
-    document.querySelectorAll(".update-note").forEach(button => {
-      button.addEventListener("click", this.updateNote.bind(this));
-    });
+    document.querySelector("#my-notes").addEventListener("click", function (e) {
+      if (e.target.classList.contains("update-note")) {
+        this.updateNote(e);
+      }
+    }.bind(this));
 
     const submitNote = document.querySelector(".submit-note");
     submitNote.addEventListener("click", this.createNote.bind(this));
@@ -87,6 +93,7 @@ class MyNotes {
           console.log("Sorry");
           console.log(response);
         } else {
+          thisNote.remove();
           console.log("Congrats");
           console.log(response);
         }
@@ -152,7 +159,7 @@ class MyNotes {
       })
       .then(data => {
         {
-          document.querySelectorAll(".new-note-title .new-note-body").forEach(field => {
+          document.querySelectorAll(".new-note-title, .new-note-body").forEach(field => {
             field.value = '';
           });
           document.querySelector("#my-notes").insertAdjacentHTML("afterbegin", `
