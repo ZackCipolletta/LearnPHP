@@ -146,15 +146,33 @@ class MyNotes {
       .then((response) => { // Call success callback on any successful response
         if (!response.ok) {
           console.log("Sorry");
-          console.log(response);
-        } else {
+          throw new Error(`HTTP status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        {
           document.querySelectorAll(".new-note-title .new-note-body").forEach(field => {
             field.value = '';
           });
-          document.querySelector("#my-notes").insertAdjacentHTML("afterbegin", "<li>Imagine real data here</li>");
+          document.querySelector("#my-notes").insertAdjacentHTML("afterbegin", `
+            <li data-id="${data.id}">
+              <input readonly class="note-title-field" value="${data.title.raw}">
+              <span class="edit-note">
+                <i class="fa fa-pencil" aria-hidden="true"> </i>
+                Edit
+              </span>
+              <span class="delete-note">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                Delete
+              </span>
+              <textarea readonly class="note-body-field">${data.content.raw}</textarea>
+              <span class="update-note btn btn--blue btn--small"><i class="fa fa-arrow-right" aria-hidden="true"></i>Save</span>
+            </li>
+            `);
 
           console.log("Congrats");
-          console.log(response);
+          console.log(data);
         }
       })
       .catch((error) => { // Call error callback on any failure
