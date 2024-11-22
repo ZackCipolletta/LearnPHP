@@ -91,11 +91,20 @@ class MyNotes {
       .then((response) => { // Call success callback on any successful response
         if (!response.ok) {
           console.log("Sorry");
-          console.log(response);
+          return response.json().then((errorData) => {
+            console.error("Error details:", errorData);
+            throw new Error(`HTTP status ${response.status}`);
+          });
         } else {
-          thisNote.remove();
-          console.log("Congrats");
-          console.log(response);
+          return response.json();
+        }
+      })
+      .then((data) => {
+        this.makeNoteReadOnly(thisNote);
+        console.log("Congrats");
+        console.log("Parsed Response:", data);
+        if (data.userNoteCount < 5) {
+          document.querySelector(".note-limit-message").classList.remove("active");
         }
       })
       .catch((error) => { // Call error callback on any failure
@@ -122,12 +131,18 @@ class MyNotes {
       .then((response) => { // Call success callback on any successful response
         if (!response.ok) {
           console.log("Sorry");
-          console.log(response);
+          return response.json().then((errorData) => {
+            console.error("Error details:", errorData);
+            throw new Error(`HTTP status ${response.status}`);
+          });
         } else {
-          this.makeNoteReadOnly(thisNote);
-          console.log("Congrats");
-          console.log(response);
+          return response.json();
         }
+      })
+      .then((data) => {
+        this.makeNoteReadOnly(thisNote);
+        console.log("Congrats");
+        console.log("Parsed Response:", data);
       })
       .catch((error) => { // Call error callback on any failure
         console.log("Error:", error.message);
