@@ -45,9 +45,8 @@ while (have_posts()) {
             <i class="fa fa-trash-o" aria-hidden="true"></i>
             Delete
           </span>
-          <textarea readonly class="note-body-field">
-            <?php echo esc_textarea(wp_strip_all_tags(get_the_content())) ?>
-          </textarea>
+          <!-- cannot break this line down to have the php on on a separate line because this will cause additional indentation to display on the page -->
+          <textarea readonly class="note-body-field"><?php echo esc_textarea(wp_strip_all_tags(get_the_content())); ?></textarea>
           <span class="update-note btn btn--blue btn--small"><i class="fa fa-arrow-right" aria-hidden="true"></i>Save</span>
         </li>
       <?php
