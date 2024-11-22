@@ -2400,7 +2400,9 @@ class MyNotes {
       // Call success callback on any successful response
       if (!response.ok) {
         console.log("Sorry");
-        throw new Error(`HTTP status ${response.status}`);
+        return response.json().then(errorData => {
+          throw new Error(errorData.data || `HTTP status ${response.status}`);
+        });
       }
       return response.json();
     }).then(data => {
@@ -2428,7 +2430,7 @@ class MyNotes {
       }
     }).catch(error => {
       // Call error callback on any failure
-      console.log("Error:", error.message);
+      console.error("Error:", error.message);
     });
   }
 }
