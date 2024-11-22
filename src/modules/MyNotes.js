@@ -154,8 +154,11 @@ class MyNotes {
         if (!response.ok) {
           console.log("Sorry");
           return response.json().then((errorData) => {
+            if (errorData.data === "You have reached your note limit.") {
+              document.querySelector(".note-limit-message").classList.add("active");
+            }
             throw new Error(errorData.data || `HTTP status ${response.status}`);
-          })
+          });
         }
         return response.json();
       })

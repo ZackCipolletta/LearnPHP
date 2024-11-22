@@ -212,15 +212,19 @@ function ourLoginTitle()
 };
 
 // Force note posts to be private
-// The add_filter('wp_insert_post_data') hook in WordPress allows you to filter and modify post data
-// before it is inserted into the database. This can be particularly useful when you want to
-// programmatically adjust or sanitize the content, title, or other fields of a post.
-add_filter('wp_insert_post_data', 'makeNotePrivate');
+// The add_filter('wp_insert_post_data') hook in WordPress allows you to filter and modify 
+// post data before it is inserted into the database. This can be particularly useful when you 
+// want to programmatically adjust or sanitize the content, title, or other fields of a post.
+add_filter('wp_insert_post_data', 'makeNotePrivate', 10, 2); 
+// 10 and 2: 10 is the priority of the callback function we are setting - meaning if we were to 
+// add multiple functions to the wp_insert_post_data filter hook, the numbers specify which
+// function should run first, second etc. Lower numbers run before higher numbers. 2 is telling
+// makeNotePrivate to to use 2 parameters (by default its 1)
 
-function makeNotePrivate($data) {
+function makeNotePrivate($data, $postArr) {
   // takes 2 arguments: 1 the user account you are trying to count the posts of
   // 2 which post type you are trying to count
-  if (count_user_posts(get_current_user_id(), 'note') > 4) {
+  if (count_user_posts(get_current_user_id(), 'note') > 4 && !$postArr['ID']) {
     wp_send_json_error("You have reached your note limit.", 403);
   }
 
