@@ -232,16 +232,15 @@ function makeNotePrivate($data, $postArr)
 {
   // takes 2 arguments: 1 the user account you are trying to count the posts of
   // 2 which post type you are trying to count
-  if (count_user_posts(get_current_user_id(), 'note') > 4 && !$postArr['ID']) {
-    wp_send_json_error("You have reached your note limit.", 403);
-  }
-
   if ($data['post_type'] === 'note') {
+    if (count_user_posts(get_current_user_id(), 'note') > 4 && !$postArr['ID']) {
+      die("You have reached your note limit.");
+    }
     $data['post_content'] = sanitize_textarea_field($data['post_content']);
     $data['post_title'] = sanitize_text_field($data['post_title']);
   }
 
-  if ($data['post_type'] === 'note' && $data['post_status' != 'trash']) {
+  if ($data['post_type'] === 'note' && $data['post_status'] !== 'trash') {
     $data['post_status'] = "private";
   }
   return $data;
