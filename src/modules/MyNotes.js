@@ -42,40 +42,37 @@ class MyNotes {
 
   makeNoteEditable(thisNote) {
     // Update the edit button to "Cancel"
-    const editNote = thisNote.querySelector(".edit-note");
-    editNote.innerHTML = ` <i class="fa fa-times" aria-hidden="true"> </i> Cancel`;
+    thisNote.querySelector(".edit-note").innerHTML = `<i class="fa fa-times" aria-hidden="true"></i> Cancel
+    `;
 
     // Make title and body fields editable
-    thisNote.querySelectorAll(".note-title-field, .note-body-field").forEach((field) => {
-      field.removeAttribute("readonly");
-      field.classList.add("note-active-field");
-    });
+    thisNote.querySelector(".note-title-field").removeAttribute("readonly");
+    thisNote.querySelector(".note-body-field").removeAttribute("readonly");
+    thisNote.querySelector(".note-title-field").addAttribute("note-active-field");
+    thisNote.querySelector(".note-body-field").addAttribute("note-active-field");
 
     // Show the update button
-    const updateNote = thisNote.querySelector(".update-note");
-    updateNote.classList.add("update-note--visible");
+    thisNote.querySelector(".update-note").classList.add("update-note--visible");
 
     // Set the state to "editable"
-    thisNote.dataset.state = "editable";
+    thisNote.setAttribute("data-state", "editable");
   }
 
   makeNoteReadOnly(thisNote) {
     // Update the edit button from "cancel" back to "Edit"
-    const readOnlyNote = thisNote.querySelector(".edit-note");
-    readOnlyNote.innerHTML = ` <i class="fa fa-pencil" aria-hidden="true"> </i> Edit`;
+    thisNote.querySelector(".edit-note").innerHTML = `<i class="fa fa-pencil" aria-hidden="true"></i> Edit`;
 
     // Make title and body fields read-only
-    thisNote.querySelectorAll(".note-title-field, .note-body-field").forEach((field) => {
-      field.classList.remove("note-active-field");
-      field.setAttribute("readonly", true);
-    });
+    thisNote.querySelector(".note-title-field").remove("note-active-field")
+    thisNote.querySelector(".note-body-field").remove("note-active-field")
+    thisNote.querySelector(".note-title-field").setAttribute("readonly", true);
+    thisNote.querySelector(".note-body-field").setAttribute("readonly", true);
 
     // Hide the update button
-    const updateNote = thisNote.querySelector(".update-note");
-    updateNote.classList.remove("update-note--visible");
+    thisNote.querySelector(".update-note").classList.remove("update-note--visible");
 
     // Set the state to "read-only"
-    thisNote.dataset.state = "read-only";
+    thisNote.setAttribute("data-state", "read-only");
   }
 
   deleteNote(e) {
