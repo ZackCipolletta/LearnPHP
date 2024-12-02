@@ -4,10 +4,10 @@
 get_header();
 
 while (have_posts()) {
-  the_post(); 
+  the_post();
   pageBanner();
-  ?>
-  
+?>
+
   <div class="container container--narrow page-section">
 
     <div class="generic-content">
@@ -19,10 +19,46 @@ while (have_posts()) {
         </div>
 
         <div class="two-thirds">
-          <span class="like-box">
+          <?php
+          $likeCount = new WP_Query(array(
+            'post_type' => 'like',
+            'meta_query' => array(
+              // we are looking for a 'liked prof id' which is 'equal' to the value of the page ID (in this case the professor ID)
+              array(
+                'key' => 'liked_professor_id',
+                'compare' => '=',
+                'value' => get_the_ID()
+              )
+            )
+          ));
+
+          $existStatus = 'no';
+
+          $existQuery = new WP_Query(array(
+            'author' => get_current_user_id(),
+            'post_type' => 'like',
+            'meta_query' => array(
+              // we are looking for a 'liked prof id' which is 'equal' to the value of the page ID (in this case the professor ID)
+              array(
+                'key' => 'liked_professor_id',
+                'compare' => '=',
+                'value' => get_the_ID()
+              )
+            )
+          ));
+
+          if ($existQuery->found_posts) {
+            $existStatus = 'yes';
+          }
+
+          ?>
+
+          <span class="like-box" data-exists="<?php echo $existStatus; ?>">
             <i class="fa fa-heart-o" aria-hidden="true"></i>
             <i class="fa fa-heart" aria-hidden="true"></i>
-            <span class="like-count">3</span>
+            <!-- looks inside the likeCount object for the number of posts (in this case each post is just a professor ID. So,  we are looking for the number of posts that match a given professor ID, then echoing that out to the page.) -->
+            <span class="like-count"><?php echo $likeCount->found_posts; ?>
+            </span>
           </span>
           <?php the_content(); ?>
         </div>
